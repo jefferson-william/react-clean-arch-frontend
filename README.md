@@ -1,0 +1,135 @@
+# Clean Architecture Frontend with React
+
+<p align="center" width="100%">
+  <img width="50%" src="https://user-images.githubusercontent.com/2935122/115732148-1933a380-a35e-11eb-9f52-55631f5eeb0f.png">
+</p>
+
+No futuro, um novo framework deve nascer e ele pode ser o mais adequado de ser usado.
+
+Clean Architecture será útil para que regras de negócios fiquem desacopladas da camada de `presentation`.
+Com isso, será muito mais simples adicionar uma nova _presentation_ independente da decisão do mercado, _squad_ ou empresa.
+
+## yarn workspaces
+
+Este projeto está usando `yarn workspaces` para facilitar importações entre as camadas `module`,
+`shared` e `presentation`.
+
+## Execução
+
+```bash
+nvm use
+yarn install
+yarn dev # http://localhost:9000
+yarn test
+yarn lint
+yarn build
+yarn start # http://localhost:5000
+```
+
+## Estrutura de pasta
+
+```
+├── module/
+|   ├── [module]/
+|   |   ├── data/
+|   |   |   ├── model/
+|   |   |   ├── adapter/
+|   |   |   ├── factory/
+|   |   |   ├── repository/
+|   |   |   ├── constant/
+|   |   ├── domain/
+|   |   |   ├── entity/
+|   |   |   ├── usecase/
+|   |   |   ├── validation/
+|   |   |   ├── error/
+|   |   |   ├── i18n/
+├── shared/
+|   ├── infra/
+|   |   ├── cache/
+|   |   ├── http/
+├── presentation/
+|   ├── [framework-frontend]/
+|   |   ├── public/
+|   |   ├── src/
+|   |   |   ├── pages/
+|   |   |   ├── module/
+|   |   |   |   ├── [module]/
+|   |   |   |   |   ├── assets/
+|   |   |   |   |   ├── components/
+|   |   |   |   |   |   ├── atoms/
+|   |   |   |   |   |   ├── molecules/
+|   |   |   |   |   |   ├── organisms/
+|   |   |   |   |   |   ├── templates/
+|   |   |   |   |   |   ├── pages/
+|   |   |   ├── shared/
+|   |   |   |   ├── assets/
+|   |   |   |   ├── styles/
+|   |   |   |   |   ├── global.ts
+|   |   |   |   |   ├── theme.ts
+|   |   |   |   ├── components/
+|   |   |   |   |   ├── [atomic-design-folders]
+```
+
+### Entendendo a estrutura
+
+`module` - Organizar e centralizar arquivos em comum.
+
+`shared` - Arquivos que são de uso compartilhado entre os _modules_ e _presentations_.
+
+`data` - Local onde ficam informações puras como no caso dos _model_ e _constant_, busca por dados como `repository` e que normalmente serão usadas pelas `entity` e `usecase` em especial.
+
+`domain` - Implementações com lógicas, funções e classes.
+
+`entity` - Regras de `business`, ou seja, cálculos e regras/lógicas de negócio.
+
+`usecase` - Regras de `application`, ou seja, arquivos com `entity` por exemplo para serem usados no
+`presentation` e outros.
+
+`adapter` - Conversão de dados que seja mais acessível e conveniente, para `entity` e `usecase` por exemplo.
+
+`factory` - Serve para unir, sem nenhum regra de negócio ou lógica, implementações em comum, que exporta elas de forma centralizada, para facilitar o que seria importação de múltiplos recursos, no _presentation_ ou outro.
+
+`repository` - Centralização de configurações para _requests_. Normalmente consome recursos de `infra` ou `lib/axios`.
+
+`validation` - _Schemas_ de validação como os do [Yup](https://www.npmjs.com/package/yup) - dê preferência ele - e lógicas em JS com validações.
+
+`constant` - Constantes e _enums_ em _upper case_.
+
+`error` - Centralização de erros como aqueles usados no `throw`.
+
+`i18n` - Centralização dos JSON com traduções. Traduções genéricas como as de um _footer_, ficam em `shared/data/i18n`.
+
+`model` - _types_ de todos os tipos de dados e informações, podendo ser _input_ e/out _output_ das `entity`, `usecase`, `repository`, formulários ou _models_ de banco de dados em si.
+
+`infra` - Recursos de máquina como servidor ou navegador se fazer sentido.
+
+`presentation` - Contém _frameworks frontend_ por exemplo. Pode ter dois _presentation_ ou mais, como exemplo de `angularjs` (projeto legado) e `react` (novo projeto com páginas reescritas do legado).
+
+`[framework-frontend]` - Deixei ali a estrutura de pasta do _framework_ **React**.
+
+`lib` - Recursos do navegador como _Local Storage_ se fazer sentido, bibliotecas de terceiro como _axios_ e etc.
+
+`utils` - Muito cuidado com esse aqui. Deve ser o menos utilizado e em apenas ocasiões que não seja possível
+colocar nas demais pastas.
+
+`components` - Estrutura de pastas do _Atomic Design_ para organizar melhor os componentes.
+
+`pages` - Em exemplos como **NextJS**, acaba por ter duas pasta _pages_. `src/pages` é do NextJS e não tem implementação de página. Apenas importa do `[module]/components/pages/`.
+
+`shared/styles` - Estilos genéricos da aplicação como temas e CSS global.
+
+`shared/component` - Componentes genéricos como _Layout_, _Header_ e _Footer_ organizados via _Atomic Design_.
+
+## Deploy com Vercel
+
+**Project name:** react-clean-arch-frontend
+
+**Framework preset:** Create React App
+
+**Root dictionary:** ./
+
+**Build command:** yarn build
+
+**Output directory:** ./presentation/react/build
+
+**Environment variables:** `NODE_ENV` = production | `PUBLIC_URL` = <url generated by Vercel>

@@ -1,0 +1,26 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail 'yarn dev:react'",
+    "build": "concurrently --kill-others-on-fail 'yarn build:react'",
+    "start": "concurrently --kill-others-on-fail 'yarn start:react'",
+    "lint": "concurrently --kill-others-on-fail 'yarn lint:react'",
+    "test": "concurrently --kill-others-on-fail 'yarn test:react'",
+    "dev:react": "yarn workspace @app/react dev",
+    "build:react": "yarn workspace @app/react build",
+    "start:react": "yarn workspace @app/react start",
+    "lint:react": "yarn workspace @app/react lint",
+    "test:react": "yarn workspace @app/react test"
+  },
+  "workspaces": [
+    "module",
+    "presentation/react",
+    "shared"
+  ],
+  "dependencies": {
+    "concurrently": "^6.1.0"
+  }
+}
